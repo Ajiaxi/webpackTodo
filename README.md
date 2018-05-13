@@ -7,3 +7,6 @@
  `ts-loader:安装`
 - npm i typescript ts-loader -S
 - npm i typescript awesome-typescript-loader -save
+
+
+ [CommonsChunkPlugin：打包公共模块](https://github.com/yyccQQu/webpackTodo/tree/master/Webpack333/CommonsChunkPlugin)
