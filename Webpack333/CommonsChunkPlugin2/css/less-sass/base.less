@@ -1,0 +1,15 @@
+
+@homecolor: #ff3333;
+
+html {
+    background: @homecolor;
+}
+
+.box {
+    /* 需要在样式前引入，防止覆盖 */
+    composes: bigBox from './common.less';
+    height: 333px;
+    width: 222px;
+    border-radius: 7px;
+    /*background: #333;*/
+}

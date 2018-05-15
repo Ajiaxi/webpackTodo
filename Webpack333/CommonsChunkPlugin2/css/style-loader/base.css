@@ -1,0 +1,10 @@
+html {
+    background: red;
+}
+
+.box {
+    height: 333px;
+    width: 222px;
+    border: 7px;
+    background: #333;
+}
