@@ -2,13 +2,10 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
 
-var PurifyCSS = require('purifycss-webpack');
-var glob = require('glob-all')
-
 
 module.exports = {
     entry: {
-        app: './tree-shaking/app.js'
+        app: './postcss/app.js'
         
     },
 
@@ -19,9 +16,10 @@ module.exports = {
         chunkFilename: '[name].bundle.js'
     },
 
-    //JS Tree Shaking 按需打包
-    //CSS Tree Shaking 按需打包 --webpack插件  purifycss-webpack //https://www.npmjs.com/package/purifycss-webpack
-     // - npm glob-all purify-css purifycss-webpack -S 
+    // PostCSS, Autoprefixer, CSS-nano, CSS-next
+    // Autoprefixer: 帮忙加上css兼容各个浏览器的前缀，
+    // CSS-nano: 控制css-loader里面css的压缩
+    // CSS-next: 使用未来css的语法：CSS Variables/ custom selectors calc()
     module: {
         rules: [
             {
@@ -56,18 +54,7 @@ module.exports = {
                     ]
                 })
                 
-            },
-            {
-                test: /\.js$/,
-                use: [
-                   {
-                       loader: 'babel-loader',
-                       options: {
-                           presets: ['env'],//JS Tree Shaking 按需打包
-                           plugins: ['lodash'] //模块化打包（剔除）lodash是要用的<第三方插件treeshaking>
-                       }
-                   } 
-                ]
+                
             }
         ]
 
@@ -78,17 +65,7 @@ module.exports = {
         new ExtractTextWebpackPlugin({
             filename: '[name].min.css',
             allChunks: false
-        }),
-
-        new PurifyCSS({
-            paths: glob.sync([
-                path.join(__dirname, './*.html'),
-                path.join(__dirname, './tree-shaking/*.js') 
-            ])
-        }),
-
-        new webpack.optimize.UglifyJsPlugin() //将未应用的js代码从打包的包中剔除《静态treeshaking》
-
+        })
 
     ]
 }
