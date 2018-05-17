@@ -8,7 +8,7 @@ var glob = require('glob-all')
 
 module.exports = {
     entry: {
-        app: './FilePro/app.js'
+        app: './doimg/app.js'
         
     },
 
@@ -19,9 +19,7 @@ module.exports = {
         chunkFilename: '[name].bundle.js'
     },
 
-    //JS Tree Shaking 按需打包
-    //CSS Tree Shaking 按需打包 --webpack插件  purifycss-webpack //https://www.npmjs.com/package/purifycss-webpack
-     // - npm glob-all purify-css purifycss-webpack -S 
+    //file-loader: 处理文件 ，url-loader: base64编码， img-loader: 压缩图片， postcss-sprites: 合成雪碧图
     module: {
         rules: [
             {
@@ -45,6 +43,10 @@ module.exports = {
                                 ident: 'postcss',
                                 plugins: [
                                    // require('autoprefixer')(),
+                                    require('postcss-sprites')({
+                                        spritePath: 'dist/assets/imgs/sprites', //放置路径
+                                        retina: true //生成视网膜像素级图片
+                                    }),//合成雪碧图
                                     require('postcss-cssnext')() //此部分已包含上一部分功能
                                 ]
                             }
@@ -58,30 +60,49 @@ module.exports = {
                 
             },
             {
+                test: /\.js$/,
+                use: [
+                   {
+                       loader: 'babel-loader',
+                       options: {
+                           presets: ['env'],//JS Tree Shaking 按需打包
+                           plugins: ['lodash'] //模块化打包（剔除）lodash是要用的<第三方插件treeshaking>
+                       }
+                   } 
+                ]
+            },
+            {
                 test: /\.(png|jpg|jepg|gif)$/,
-                use: [{
-                        loader: 'file-loader',
+                use: [
+                    // {
+                    //     loader: 'file-loader',
+                    //     options: {
+                    //         //publicPath: '',
+                    //         //outputPath: '../dist/',指定打包位置
+                    //         useRelativePath: true
+                    //     }
+                    // },
+                    {
+                        loader: 'url-loader',
                         options: {
-                            //publicPath: '',
+                            name: '[name].min.[hash:5].[ext]',
+                            limit: 10000,//当图片大小 大于 10k的时候，次loader就和file-loader作用一样了，配上一下三个配置项
+                            //publicPath: '', 
                             //outputPath: '../dist/',指定打包位置
-                            useRelativePath: true
+                            //useRelativePath: true
+                        }
+                    },
+                    {
+                        loader: 'img-loader',
+                        options: {
+                            pngquant: {
+                                quality: 80
+                            }
                         }
                     }
-
+                    
                 ]
             }
-            // {
-            //     test: /\.js$/,
-            //     use: [
-            //        {
-            //            loader: 'babel-loader',
-            //            options: {
-            //                presets: ['env'],//JS Tree Shaking 按需打包
-            //                plugins: ['lodash'] //模块化打包（剔除）lodash是要用的<第三方插件treeshaking>
-            //            }
-            //        } 
-            //     ]
-            // }
         ]
 
     },
@@ -90,13 +111,13 @@ module.exports = {
         
         new ExtractTextWebpackPlugin({
             filename: '[name].min.css',
-            allChunks: false
+            allChunks: true
         }),
 
         new PurifyCSS({
             paths: glob.sync([
-                path.join(__dirname, './*.html'),
-                path.join(__dirname, './tree-shaking/*.js') 
+                path.join(__dirname, './doimg/*.html'),
+                path.join(__dirname, './doimg/*.js')
             ])
         }),
 
