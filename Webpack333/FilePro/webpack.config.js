@@ -19,6 +19,11 @@ module.exports = {
         chunkFilename: '[name].bundle.js'
     },
 
+    resolve: {
+        alias: {
+            jquery$: path.resolve(__dirname, './doimg/libs/jquery/src/jquery') //引入本地准确的第三方包
+        },
+    },
     //file-loader: 字体文件的处理
     module: {
         rules: [
@@ -107,11 +112,29 @@ module.exports = {
                 test: /\.(eot|woff2?|woff|ttf|svg)$/,
                 use: [
                     {
-                        loader: 'url-loader'
+                        loader: 'url-loader',
+                        options: {
+                            name: '[name].min.[hash:5].[ext]',
+                            limit: 5000,
+                            publicPath: '', 
+                            outputPath: '../dist/',//指定打包位置
+                            useRelativePath: true
+                        }
                     }
                 ]
 
             },
+            {
+                test: path.resolve(__dirname, 'src/app.js'),
+                use: [
+                    {
+                        loader: 'imports-loader',//准确引入第三方包
+                        options: {
+                            $: 'jquery'
+                        }
+                    }
+                ]
+            }
         ]
 
     },
@@ -130,6 +153,9 @@ module.exports = {
             ])
         }),
 
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery'
+        // }),
         new webpack.optimize.UglifyJsPlugin() //将未应用的js代码从打包的包中剔除《静态treeshaking》
 
 
