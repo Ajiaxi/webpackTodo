@@ -19,7 +19,7 @@ module.exports = {
         chunkFilename: '[name].bundle.js'
     },
 
-    //file-loader: 字体文件的处理
+    //file-loader: 处理文件 ，url-loader: base64编码， img-loader: 压缩图片， postcss-sprites: 合成雪碧图
     module: {
         rules: [
             {
@@ -43,11 +43,11 @@ module.exports = {
                                 ident: 'postcss',
                                 plugins: [
                                    // require('autoprefixer')(),
-                                    // require('postcss-sprites')({
-                                    //     spritePath: 'dist/assets/imgs/sprites', //放置路径
-                                    //     retina: true //生成视网膜像素级图片
-                                    // }),//合成雪碧图
-                                     require('postcss-cssnext')() //此部分已包含上一部分功能
+                                    require('postcss-sprites')({
+                                        spritePath: 'dist/assets/imgs/sprites', //放置路径
+                                        retina: true //生成视网膜像素级图片
+                                    }),//合成雪碧图
+                                    require('postcss-cssnext')() //此部分已包含上一部分功能
                                 ]
                             }
                         },
@@ -102,16 +102,7 @@ module.exports = {
                     }
                     
                 ]
-            }, 
-            {
-                test: /\.(eot|woff2?|woff|ttf|svg)$/,
-                use: [
-                    {
-                        loader: 'url-loader'
-                    }
-                ]
-
-            },
+            }
         ]
 
     },
@@ -119,14 +110,14 @@ module.exports = {
     plugins: [
         
         new ExtractTextWebpackPlugin({
-            filename: 'css/[name].bundle.css',
+            filename: '[name].min.css',
             allChunks: true
         }),
 
         new PurifyCSS({
             paths: glob.sync([
-                path.join(__dirname, './doimg/index.html'),
-                path.join(__dirname, './doimg/app.js')
+                path.join(__dirname, './doimg/*.html'),
+                path.join(__dirname, './doimg/*.js')
             ])
         }),
 

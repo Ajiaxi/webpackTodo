@@ -1,9 +1,10 @@
+
 @font-face {font-family: "iconfont";
-  src: url('../assets/fonts/iconfont.eot?t=1526693674875'); /* IE9*/
-  src: url('../assets/fonts/iconfont.eot?t=1526693674875#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  src: url('iconfont.eot?t=1526693674875'); /* IE9*/
+  src: url('iconfont.eot?t=1526693674875#iefix') format('embedded-opentype'), /* IE6-IE8 */
   url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
-  url('../assets/fonts/iconfont.ttf?t=1526693674875') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../assets/fonts/iconfont.svg?t=1526693674875#iconfont') format('svg'); /* iOS 4.1- */
+  url('iconfont.ttf?t=1526693674875') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1526693674875#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -27,33 +28,4 @@
 .icon-jiantou-copy:before { content: "\e603"; }
 
 .icon-shanchu:before { content: "\e602"; }
-
-
-@homecolor: #ff3333;
- html {
-     background: @homecolor;
-
- }
-
- .box {
-     height: 200px;
-     width: 200px;
-     border-radius: 4px;
-     background: #333;
- }
-
- .bigBox {
-     height: 400px;
-     height: 400px;
-     border: 5px;
-     background: #faf;
- }
-
- .smallBox {
-     width: 800px;
- }
-
- .littleBox {
-     height: 2333px;
- }
 
