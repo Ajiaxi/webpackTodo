@@ -1,9 +1,15 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var InlineChunkWebpackPlugin = require("html-webpack-inline-chunk-plugin")
 
 var PurifyCSS = require('purifycss-webpack');
 var glob = require('glob-all')
+
+var extractLess = new ExtractTextWebpackPlugin({
+    filename: 'css/[name].bundle.css'
+})
 
 
 module.exports = {
@@ -14,7 +20,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: './dist/', //资源引入路径、不引入则会默认加载跟目录
+        publicPath: 'dist/', //资源引入路径、不引入则会默认加载跟目录
         filename: '[name].bundle.js',
         chunkFilename: '[name].bundle.js'
     },
@@ -24,6 +30,9 @@ module.exports = {
             jquery$: path.resolve(__dirname, './doimg/libs/jquery/src/jquery') //引入本地准确的第三方包
         },
     },
+
+    //HtmlWebpackPlugin 
+
     //file-loader: 字体文件的处理
     module: {
         rules: [
@@ -134,6 +143,17 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.html$/,
+                use: [
+                    {
+                        loader: 'html-loader',
+                        options: {
+                            attrs: ['img:src', 'img:data-src']
+                        }
+                    }
+                ]
             }
         ]
 
@@ -141,11 +161,11 @@ module.exports = {
 
     plugins: [
         
-        new ExtractTextWebpackPlugin({
-            filename: 'css/[name].bundle.css',
-            allChunks: true
-        }),
-
+        // new ExtractTextWebpackPlugin({
+        //     filename: 'css/[name].bundle.css',
+        //     allChunks: true
+        // }),
+        extractLess,
         new PurifyCSS({
             paths: glob.sync([
                 path.join(__dirname, './doimg/index.html'),
@@ -156,6 +176,24 @@ module.exports = {
         // new webpack.ProvidePlugin({
         //     $: 'jquery'
         // }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest'
+
+        }),
+        new InlineChunkWebpackPlugin({
+            inlineChunks: ['manifest']
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: './doimg/index.html',
+            inject: false,
+            //chunks: ['app'],不指定chunk就包括所有的chunk
+            minify: {
+                collapseWhitespace: true//去除空格
+            }
+        }),
+
         new webpack.optimize.UglifyJsPlugin() //将未应用的js代码从打包的包中剔除《静态treeshaking》
 
 
