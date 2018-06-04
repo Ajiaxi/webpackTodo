@@ -7,15 +7,8 @@ var glob = require('glob-all')
 
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
-//使用middleware搭建开发环境
-// Express or Koa;
-// webpack-dev-middleware
-// webpack-hot-middleware //热
-// http-proxy-middleware 
-// connect-history-api-fallback //redirect
-// opn //open browser
 
-//cnpm i express opn webpack-dev-middleware webpack-hot-middleware http-proxy-middleware connect-history-api-fallback --save-dev
+
 
 module.exports = {
     entry: {
@@ -48,8 +41,6 @@ module.exports = {
             }
 
         },
-        hot: true,
-        hotOnly: true,//不希望通过全部刷新来触发热更新，值为true
         // historyApiFallback: true
         historyApiFallback: {
             rewrites: [
@@ -74,7 +65,7 @@ module.exports = {
         rules: [
             {
                 test: /\.less$/,
-                use: ExtractTextWebpackPlugin.extract({ //模块热更新的时候，不要extraplugin、还原这部分代码
+                use: ExtractTextWebpackPlugin.extract({
                     fallback: {
                         loader: 'style-loader'
                     },
@@ -150,11 +141,7 @@ module.exports = {
 
         new webpack.optimize.UglifyJsPlugin(), //将未应用的js代码从打包的包中剔除《静态treeshaking》
 
-        new CleanWebpackPlugin(['./dist']),
-
-        new webpack.HotModuleReplacementPlugin(), //livereloading
-
-        new webpack.NamedModulesPlugin() //livereloading
+        new CleanWebpackPlugin(['./dist'])
 
     ]
 }

@@ -7,15 +7,8 @@ var glob = require('glob-all')
 
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
-//使用middleware搭建开发环境
-// Express or Koa;
-// webpack-dev-middleware
-// webpack-hot-middleware //热
-// http-proxy-middleware 
-// connect-history-api-fallback //redirect
-// opn //open browser
 
-//cnpm i express opn webpack-dev-middleware webpack-hot-middleware http-proxy-middleware connect-history-api-fallback --save-dev
+
 
 module.exports = {
     entry: {

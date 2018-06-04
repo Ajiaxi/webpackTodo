@@ -11,3 +11,5 @@
  [CommonsChunkPlugin：打包公共模块](https://github.com/yyccQQu/webpackTodo/tree/master/Webpack333/CommonsChunkPlugin)
   
  - `代码分割` require.ensure
+ - `1-1 webpack watch mode`
+ - `-----打包的详细过程` webpack -w --progress --display-reasons --color
